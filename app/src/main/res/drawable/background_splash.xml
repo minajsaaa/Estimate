@@ -6,7 +6,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/com_facebook_favicon_white" />
+            android:src="@drawable/common_full_open_on_phone" />
     </item>
 
 </layer-list>

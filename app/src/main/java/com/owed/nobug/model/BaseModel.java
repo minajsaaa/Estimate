@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class BaseModel implements Serializable {
 
+    private String SUCCESS = "SUCCESS";
+
     //  ====================================================================================
 
     public boolean hasListField() {
@@ -25,6 +27,10 @@ public class BaseModel implements Serializable {
 
     public String nullToString(String item) {
         return item == null ? "" : item;
+    }
+
+    public boolean isSuccess(String value) {
+        return SUCCESS.equals(value.toUpperCase());
     }
 
 }

@@ -7,9 +7,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by seonjonghun on 2016. 8. 14..
- */
 public class DealFragment extends BaseFragment implements Callback {
 
 
@@ -24,10 +21,6 @@ public class DealFragment extends BaseFragment implements Callback {
 
     //  =====================================================================================
 
-    @Override
-    public CharSequence getPageTitle() {
-        return getActivity().getString(R.string.deal);
-    }
 
     //  =====================================================================================
 

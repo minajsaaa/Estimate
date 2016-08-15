@@ -57,6 +57,7 @@ public class SplashActivity extends BaseActivity implements Callback {
             @Override
             public void run() {
                 next();
+                log.show("splash next");
             }
         }, DELAY);
     }

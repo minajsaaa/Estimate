@@ -1,12 +1,17 @@
 package com.owed.nobug.net;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 
 import com.owed.estimate.BuildConfig;
 import com.owed.nobug.constant.HeaderProperty;
+import com.owed.nobug.util.DateUtil;
+import com.owed.nobug.util.DeviceInfoUtil;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -21,40 +26,52 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitBuilder {
 
+    // Retrofit Instance Container
+    private static Map<String, BaseService> instanceContainer = new HashMap<>();
+
     // OkHttp Client
     private static OkHttpClient client, unsafeClient;
 
     //  =====================================================================================
 
-/**
-     * Create OkHttpClient Instance
-     * @param context Context
-     * @return OkHttpClient Instance
-     */
     public static OkHttpClient getOkHttpClient(final Context context) {
-        client = new OkHttpClient.Builder()
-                .addInterceptor(getInterceptor(context))
-                .build();
+        if (client == null) {
+            client = new OkHttpClient.Builder()
+                    .addInterceptor(getInterceptor(context))
+                    .build();
+            return client;
+        }
+
         return client;
     }
 
     //  =========================================================================================
 
     public static BaseService with(final Context context) {
+        if (instanceContainer.containsKey(BuildConfig.API_HOST)) {
+            return instanceContainer.get(BuildConfig.API_HOST);
+        }
+
         BaseService baseService = new Retrofit.Builder()
                 .client(getOkHttpClient(context))
                 .baseUrl(BuildConfig.API_HOST)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(BaseService.class);
+        instanceContainer.put(BuildConfig.API_HOST, baseService);
         return baseService;
     }
 
     public static BaseService withUnsafe(final Context context) {
+        if (instanceContainer.containsKey(BuildConfig.API_HOST)) {
+            return instanceContainer.get(BuildConfig.API_HOST);
+        }
+
         BaseService baseService = new Retrofit.Builder()
                 .client(getUnsafeOkHttpClient(context))
                 .baseUrl(BuildConfig.API_HOST)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(BaseService.class);
+        instanceContainer.put(BuildConfig.API_HOST, baseService);
         return baseService;
     }
 
@@ -62,11 +79,15 @@ public class RetrofitBuilder {
         return new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
-
                 Request original = chain.request();
                 Request request = original.newBuilder()
-                        .header(HeaderProperty.AUTH_TOKEN, "get data")
                         .header(HeaderProperty.USER_AGENT, HeaderProperty.getUserAgent(context))
+                        .header(HeaderProperty.ACCESS_KEY, HeaderProperty.API_KEY)
+                        .header(HeaderProperty.VERSION, DeviceInfoUtil.getAppVersion(context))
+                        .header(HeaderProperty.CONTENT_TYPE, HeaderProperty.JSON_FORMAT)
+                        .header(HeaderProperty.UUID, DeviceInfoUtil.getDeviceSerialNumber())
+                        //  .header(HeaderProperty.TIME, DateUtil.getDateTime(HeaderProperty.TIME_FORMAT))
+                        .header(HeaderProperty.USER_AGENT, HeaderProperty.ANDROID)
                         .method(original.method(), original.body())
                         .build();
                 return chain.proceed(request);

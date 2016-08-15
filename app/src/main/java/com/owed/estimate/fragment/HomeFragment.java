@@ -24,11 +24,6 @@ public class HomeFragment extends BaseFragment implements Callback {
 
     //  =====================================================================================
 
-    @Override
-    public CharSequence getPageTitle() {
-        return getActivity().getString(R.string.home);
-    }
-
     //  =====================================================================================
 
     private void request() {

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.owed.estimate.R;
+import com.owed.estimate.constant.MainProperties;
 import com.owed.estimate.factory.ItemFactory;
 import com.owed.nobug.core.BaseActivity;
 import com.owed.nobug.core.BaseFragment;
@@ -112,10 +113,13 @@ public class WrapperMainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
+            viewPager.setCurrentItem(MainProperties.HOME);
         } else if (id == R.id.nav_deal) {
-
+            viewPager.setCurrentItem(MainProperties.DEAL);
         } else if (id == R.id.nav_cast) {
-
+            viewPager.setCurrentItem(MainProperties.CAST);
+        } else if( id == R.id.nav_diary ) {
+            viewPager.setCurrentItem(MainProperties.DIARY);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -6,9 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.owed.nobug.constant.property.BaseIntentProperty;
+import com.owed.nobug.util.log;
+
 public abstract class BaseFragment extends Fragment implements IBaseView {
 
     protected View mView;
+    protected String pageTitle = null;
 
     //  ========================================================================================
 
@@ -22,9 +26,6 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
                 inflater.inflate(getLayoutContentView(), container, false)
                 : super.onCreateView(inflater, container, savedInstanceState);
 
-        if( getLayoutContentView() > 0 ) {
-
-        }
         initialize();
         return mView;
     }
@@ -32,9 +33,17 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        log.show("onCreate");
     }
 
     //  =========================================================================================
+
+    @Override
+    public void setArguments(Bundle args) {
+        pageTitle = args.getString(BaseIntentProperty.TITLE);
+        super.setArguments(args);
+    }
 
     @Override
     public int getLayoutContentView() {
@@ -68,7 +77,7 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     //  =========================================================================================
 
     public CharSequence getPageTitle() {
-        return null;
+        return pageTitle;
     }
 
 }
